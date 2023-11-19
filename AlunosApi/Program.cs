@@ -1,4 +1,5 @@
 using AlunosApi.Context;
+using AlunosApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlunosApi
@@ -23,6 +24,8 @@ namespace AlunosApi
                 .AddDbContext<AppDbContext>(options => 
                 options.UseSqlServer(connection));
             #endregion
+
+            builder.Services.AddScoped<IAlunoService, AlunosService>();
 
             var app = builder.Build();
 
