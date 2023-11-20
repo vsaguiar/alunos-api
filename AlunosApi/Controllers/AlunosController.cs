@@ -75,4 +75,21 @@ public class AlunosController : ControllerBase
         }
     }
 
+
+
+    [HttpPost]
+    public async Task<ActionResult> Create(Aluno aluno)
+    {
+        try
+        {
+            await _alunoService.CreateAluno(aluno);
+
+            return CreatedAtRoute(nameof(GetAlunoById), new { id = aluno.Id }, aluno);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao criar um novo aluno.");
+        }
+    }
+
 }
