@@ -92,4 +92,28 @@ public class AlunosController : ControllerBase
         }
     }
 
+
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Update(int id, [FromBody] Aluno aluno)
+    {
+        try
+        {
+            if (aluno.Id == id)
+            {
+                await _alunoService.UpdateAluno(aluno);
+
+                return Ok($"Aluno com o id '{id}' foi atualizado com sucesso!");
+            }
+            else
+            {
+                return BadRequest("Dados inconsistentes.");
+            }
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao atualizar dados do aluno.");
+        }
+    }
+
 }
