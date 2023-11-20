@@ -31,4 +31,26 @@ public class AlunosController : ControllerBase
         }
     }
 
+
+
+    [HttpGet("Nome")]
+    public async Task<ActionResult<IAsyncEnumerable<Aluno>>> GetAlunosByName([FromQuery] string nome)
+    {
+        try
+        {
+            var alunos = await _alunoService.GetAlunosByNome(nome);
+
+            if (alunos.Count() == 0)
+            {
+                return NotFound($"Aluno '{nome}' não existe.");
+            }
+
+            return Ok(alunos);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter aluno(s) por nome.");
+        }
+    }
+
 }
