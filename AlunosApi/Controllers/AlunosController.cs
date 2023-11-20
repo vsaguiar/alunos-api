@@ -53,4 +53,26 @@ public class AlunosController : ControllerBase
         }
     }
 
+
+
+    [HttpGet("{id:int}", Name = "GetAlunoById")]
+    public async Task<ActionResult<Aluno>> GetAlunoById(int id)
+    {
+        try
+        {
+            var aluno = await _alunoService.GetAlunoById(id);
+
+            if (aluno == null)
+            {
+                return NotFound($"Não existe aluno com o id '{id}'.");
+            }
+
+            return Ok(aluno);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao obter aluno por id.");
+        }
+    }
+
 }
