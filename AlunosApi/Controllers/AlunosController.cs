@@ -116,4 +116,28 @@ public class AlunosController : ControllerBase
         }
     }
 
+
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        try
+        {
+            var aluno = await _alunoService.GetAlunoById(id);
+            if (aluno != null)
+            {
+                await _alunoService.DeleteAluno(aluno);
+                return Ok($"Aluno com o id '{id}' foi excluído com sucesso!");
+            }
+            else
+            {
+                return NotFound("Aluno não encontrado.");
+            }
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao atualizar dados do aluno.");
+        }
+    }
+
 }
