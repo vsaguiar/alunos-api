@@ -37,13 +37,16 @@ namespace AlunosApi
                 app.UseSwaggerUI();
             }
 
+            app.UseCors(opt =>
+            {
+                opt.WithOrigins("http://localhost:3000");
+                opt.AllowAnyMethod();
+                opt.AllowAnyHeader();
+            });
+
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
