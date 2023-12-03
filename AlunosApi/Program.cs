@@ -1,5 +1,6 @@
 using AlunosApi.Context;
 using AlunosApi.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AlunosApi
@@ -25,6 +26,13 @@ namespace AlunosApi
                 options.UseSqlServer(connection));
             #endregion
 
+            #region Habilitando o Identity
+            builder.Services
+                .AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+            #endregion
+
             builder.Services.AddScoped<IAlunoService, AlunosService>();
 
             var app = builder.Build();
@@ -37,12 +45,14 @@ namespace AlunosApi
                 app.UseSwaggerUI();
             }
 
+            #region CORS
             app.UseCors(opt =>
             {
                 opt.WithOrigins("http://localhost:3000");
                 opt.AllowAnyMethod();
                 opt.AllowAnyHeader();
             });
+            #endregion
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
