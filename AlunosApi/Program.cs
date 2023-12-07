@@ -1,7 +1,10 @@
 using AlunosApi.Context;
 using AlunosApi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace AlunosApi
 {
@@ -33,6 +36,26 @@ namespace AlunosApi
                 .AddDefaultTokenProviders();
             #endregion
 
+            #region JWT
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
+            #endregion
+
             builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
             builder.Services.AddScoped<IAlunoService, AlunosService>();
 
@@ -56,6 +79,7 @@ namespace AlunosApi
             #endregion
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
