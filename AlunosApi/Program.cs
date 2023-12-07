@@ -33,6 +33,7 @@ namespace AlunosApi
                 .AddDefaultTokenProviders();
             #endregion
 
+            builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
             builder.Services.AddScoped<IAlunoService, AlunosService>();
 
             var app = builder.Build();
