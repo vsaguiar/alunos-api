@@ -11,7 +11,7 @@ public class RegisterModel
 
     [Required]
     [DataType(DataType.Password)]
-    public string Passowrd { get; set; }
+    public string Password { get; set; }
 
 
     [DataType(DataType.Password)]
